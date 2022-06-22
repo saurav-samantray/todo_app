@@ -26,12 +26,12 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    const logo = Hero(
+    final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
         radius: 48.0,
-        child: Text("Jumbo ToDo", style: TextStyle(fontSize: 40, color: JTThemes.primaryColor),),//Image(image: AssetImage('assets/logo.png')),
+        child: Text("Jumbo ToDo", style: TextStyle(fontSize: 40, color: Theme.of(context).primaryColor),),
       ),
     );
 
@@ -90,10 +90,10 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Login successful for : ${res.email}'),
-              backgroundColor: Colors.green.shade300,
-            ));
+            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            //   content: Text('Login successful for : ${res.email}'),
+            //   backgroundColor: Colors.green.shade300,
+            // ));
             setState(() {
               isLoading = !isLoading;
             });

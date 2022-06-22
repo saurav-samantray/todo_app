@@ -45,6 +45,7 @@ dependencies:
   shimmer: ^2.0.0
   carousel_slider: ^4.1.1
   syncfusion_flutter_charts: ^20.1.61
+  syncfusion_flutter_datepicker: ^20.1.61
 
 dev_dependencies:
   flutter_test:

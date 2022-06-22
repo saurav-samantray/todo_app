@@ -31,18 +31,10 @@ class ToDoApp extends StatelessWidget {
     return ThemeProvider(
         initTheme: user.isDarkMode ? JTThemes.darkTheme : JTThemes.lightTheme,
         child: MaterialApp(
-          title: 'CultrPlus',
+          title: 'Jumbo ToDo',
           debugShowCheckedModeBanner: false,
-          // theme: ThemeData(
-          //   primaryColor: const Color(0xFF129da5),
-          //   primarySwatch: MaterialColor(0xFF129da5, color),
-          //   splashColor: Colors.transparent,
-          //   highlightColor: Colors.transparent,
-          //   hoverColor: Colors.transparent,
-          //   fontFamily: 'Roboto',
-          // ),
           theme: user.isDarkMode ? JTThemes.darkTheme : JTThemes.lightTheme,
-          home: const IntroPage(),
+          home: IntroPage(),
           routes: routes,
         ));
   }

@@ -25,6 +25,7 @@ class JTThemes {
 
   static final darkTheme = ThemeData(
     scaffoldBackgroundColor: Colors.grey.shade900,
+    primaryTextTheme: TextTheme(labelSmall: TextStyle(color: Colors.grey.shade500)),
     primaryColorDark: darkPrimaryColor,
     primaryColor: darkPrimaryColor,
     primaryColorLight: primaryColorLight,
@@ -39,7 +40,7 @@ class JTThemes {
 
   static final lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
-    backgroundColor: primary,
+    backgroundColor: Colors.white,
     primaryColor: primaryColor,
     primaryColorDark: Colors.grey.shade800,
     primaryColorLight: primaryColorLight,

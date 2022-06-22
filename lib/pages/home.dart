@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/pages/create.dart';
 import 'package:todo_app/pages/listing.dart';
 import 'package:todo_app/pages/profile.dart';
+import 'package:todo_app/widget/appbar_widget.dart';
 
-import '../themes.dart';
 import 'dashboard.dart';
 
 class HomePage extends StatefulWidget {
@@ -153,14 +153,15 @@ class _HomePageState extends State<HomePage> {
             builder: (context) => WillPopScope(
               onWillPop: _onBackPressed,
               child: Scaffold(
-                appBar: AppBar(
-                  leading: IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.arrow_back_ios, color: JTThemes.primaryColor,)
-                  ),
-                  backgroundColor: JTThemes.widgetLightBackground,
-                  elevation: 0,
-                ),
+                appBar: buildAppBar(context, ""),
+                // appBar: AppBar(
+                //   leading: IconButton(
+                //       onPressed: () => Navigator.of(context).pop(),
+                //       icon: const Icon(Icons.arrow_back_ios, color: JTThemes.primaryColor,)
+                //   ),
+                //   backgroundColor: JTThemes.widgetLightBackground,
+                //   elevation: 0,
+                // ),
                 body: pages[pageIndex],
                 bottomNavigationBar: buildCPNavBar(context),
               ),
