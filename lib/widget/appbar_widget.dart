@@ -10,7 +10,7 @@ AppBar buildAppBar(BuildContext context, String title) {
 
   themeSwitcher() => ThemeSwitcher(
     builder: (context) => IconButton(
-      icon: Icon(CupertinoIcons.moon_stars, color: Theme.of(context).primaryColor,),
+      icon: Icon(CupertinoIcons.moon_stars, color: JTThemes.primaryColor,),
       onPressed: () {
         log.i("isDarkMode $isDarkMode");
         final theme = isDarkMode ? JTThemes.lightTheme : JTThemes.darkTheme;

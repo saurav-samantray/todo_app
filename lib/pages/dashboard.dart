@@ -34,7 +34,7 @@ class _DashboardPageState extends State<DashboardPage> {
     ];
 
     final dateStyle = TextStyle(fontSize: 20, color: Colors.grey.shade500);
-    const dateIcon = Icon(
+    final dateIcon = const Icon(
       Icons.calendar_today_rounded,
       size: 20,
       color: JTThemes.primaryColor,
@@ -44,7 +44,7 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Builder(
             builder: (context) => Scaffold(
                     body: Column(children: <Widget>[
-                  const Text(
+                  Text(
                     "Status Breakdown",
                     style:
                         TextStyle(fontSize: 30, color: JTThemes.primaryColor),
@@ -56,11 +56,11 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: TextFormField(
                       controller: startDate,
                       style: dateStyle,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(10),
                         isDense: true,
-                        border: OutlineInputBorder(borderSide: BorderSide(color: JTThemes.primaryColor)),
-                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: JTThemes.primaryColor)),
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
                         labelText: 'Start Date',
                         labelStyle: TextStyle(color: JTThemes.primaryColor),
                         floatingLabelAlignment: FloatingLabelAlignment.start,
@@ -95,11 +95,11 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: TextFormField(
                       controller: endDate,
                       style: dateStyle,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(10),
                         isDense: true,
-                        border: OutlineInputBorder(borderSide: BorderSide(color: JTThemes.primaryColor)),
-                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: JTThemes.primaryColor)),
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
                         //focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: JTThemes.primaryColor)),
                         labelText: 'End Date',
                         labelStyle: TextStyle(color: JTThemes.primaryColor),
@@ -136,7 +136,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     padding: EdgeInsets.all(10),
                       child: Container(
                         decoration: BoxDecoration(
-                            border: Border.all(color: JTThemes.primaryColor),
+                            border: Border.all(color: Theme.of(context).primaryColor),
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
                           //height: 200,
@@ -153,7 +153,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             legend: Legend(
                               isVisible: true,
                               width: '100%',
-                              textStyle: TextStyle(fontSize: 15),
+                              textStyle: TextStyle(fontSize: 15, color: JTThemes.primaryColor),
                             ),
                             //title: ChartTitle(text: "ToDo Status", textStyle: TextStyle(fontSize: 30, color: JTThemes.primaryColor)),
                             //legend: Legend(title: LegendTitle(text: "something")),

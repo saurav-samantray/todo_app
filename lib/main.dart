@@ -30,11 +30,11 @@ class ToDoApp extends StatelessWidget {
 
     return ThemeProvider(
         initTheme: user.isDarkMode ? JTThemes.darkTheme : JTThemes.lightTheme,
-        child: MaterialApp(
+        builder: (context, theme) => MaterialApp(
           title: 'Jumbo ToDo',
           debugShowCheckedModeBanner: false,
-          theme: user.isDarkMode ? JTThemes.darkTheme : JTThemes.lightTheme,
-          home: IntroPage(),
+          theme: theme,
+          home: HomePage(),
           routes: routes,
         ));
   }
