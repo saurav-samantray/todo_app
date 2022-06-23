@@ -1,4 +1,5 @@
 
+import '../model/todo.dart';
 import '../model/user.dart';
 
 class UserPreferences {
@@ -11,4 +12,12 @@ class UserPreferences {
     'Certified Personal Trainer and Nutritionist with years of experience in creating effective diets and training plans focused on achieving individual customers goals in a smooth way.',
     isDarkMode: false,
   );
+
+  static List<ToDo> initialTodos = [
+    ToDo("shopping", Status.NEW, DateTime.now().add(Duration(days: 5))),
+    ToDo("flight ticket", Status.COMPLETE, DateTime.now().subtract(Duration(days: 5))),
+    ToDo("sleeping", Status.CANCELLED, DateTime.now().add(Duration(days: 2))),
+    ToDo("programing", Status.IN_PROGRESS, DateTime.now().add(Duration(days: 10))),
+    ToDo("travelling", Status.COMPLETE, DateTime.now().add(Duration(days: 10))),
+  ];
 }

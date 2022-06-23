@@ -3,10 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:todo_app/model/todo.dart';
 import 'package:todo_app/themes.dart';
+import "package:collection/collection.dart";
 
+import 'dart:math' as math;
 import '../main.dart';
+import '../utils/user_preferences.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -26,12 +31,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<ChartData> chartData = [
-      ChartData('Complete', 25, Colors.yellow),
-      ChartData('Yet To Start', 38, Colors.yellow.shade200),
-      ChartData('In Progress', 34, Colors.yellow.shade100),
-      ChartData('Cancelled', 52, Colors.yellow.shade900)
-    ];
+
 
     final dateStyle = TextStyle(fontSize: 20, color: Colors.grey.shade500);
     final dateIcon = const Icon(
@@ -40,126 +40,153 @@ class _DashboardPageState extends State<DashboardPage> {
       color: JTThemes.primaryColor,
     );
 
+    Future<void> _initial() async {
+
+      //await Future.delayed(Duration(seconds: 3));
+      log.i("Loading Initial Data");
+    }
+
     return ThemeSwitchingArea(
-        child: Builder(
-            builder: (context) => Scaffold(
-                    body: Column(children: <Widget>[
-                  Text(
-                    "Status Breakdown",
-                    style:
-                        TextStyle(fontSize: 30, color: JTThemes.primaryColor),
-                  ),
-                  Padding(padding: EdgeInsets.only(top: 20)),
-                  Row(children: [
-                    Padding(padding: EdgeInsets.only(left: 10)),
-                    Expanded(
-                        child: TextFormField(
-                      controller: startDate,
-                      style: dateStyle,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(10),
-                        isDense: true,
-                        border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
-                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
-                        labelText: 'Start Date',
-                        labelStyle: TextStyle(color: JTThemes.primaryColor),
-                        floatingLabelAlignment: FloatingLabelAlignment.start,
-                        //icon: dateIcon,
-                        suffixIcon: dateIcon,
-                        //suffixIconConstraints: BoxConstraints(maxWidth: 10, maxHeight: 10)
-                      ),
-                      readOnly: true,
-                      onTap: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime.now()
-                                .subtract(Duration(days: 365 * 5)),
-                            lastDate: DateTime.now());
-                        if (pickedDate != null) {
-                          //logger.d(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                          String formattedDate =
-                              DateFormat("yyyy-mm-dd").format(pickedDate);
-                          log.d(formattedDate);
-                          //you can implement different kind of Date Format here according to your requirement
-                          setState(() {
-                            startDate.text = formattedDate;
-                          });
-                        } else {
-                          log.d("Date is not selected");
-                        }
-                      },
-                    )),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
-                    Expanded(
-                        child: TextFormField(
-                      controller: endDate,
-                      style: dateStyle,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(10),
-                        isDense: true,
-                        border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
-                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
-                        //focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: JTThemes.primaryColor)),
-                        labelText: 'End Date',
-                        labelStyle: TextStyle(color: JTThemes.primaryColor),
-                        floatingLabelAlignment: FloatingLabelAlignment.start,
-                        //icon: dateIcon,
-                        suffixIcon: dateIcon,
-                        //suffixIconConstraints: BoxConstraints(maxWidth: 10, maxHeight: 10)
-                      ),
-                      readOnly: true,
-                      onTap: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime.now()
-                                .subtract(Duration(days: 365 * 5)),
-                            lastDate: DateTime.now());
-                        if (pickedDate != null) {
-                          //logger.d(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                          String formattedDate =
-                              DateFormat("yyyy-mm-dd").format(pickedDate);
-                          log.d(formattedDate);
-                          //you can implement different kind of Date Format here according to your requirement
-                          setState(() {
-                            endDate.text = formattedDate;
-                          });
-                        } else {
-                          log.d("Date is not selected");
-                        }
-                      },
-                    )),
-                    Padding(padding: EdgeInsets.only(left: 10)),
-                  ]),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Theme.of(context).primaryColor),
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                          //height: 200,
-                          child: SfCircularChart(
-                            series: <CircularSeries>[
-                              // Render pie chart
-                              PieSeries<ChartData, String>(
-                                  dataSource: chartData,
-                                  pointColorMapper: (ChartData data, _) =>
-                                      data.color,
-                                  xValueMapper: (ChartData data, _) => data.x,
-                                  yValueMapper: (ChartData data, _) => data.y)
-                            ],
-                            legend: Legend(
-                              isVisible: true,
-                              width: '100%',
-                              textStyle: TextStyle(fontSize: 15, color: JTThemes.primaryColor),
+        child: FutureBuilder<void>(
+          future: _initial(),
+            builder: (context, AsyncSnapshot<void> snapshot) {
+            switch(snapshot.connectionState){
+              case ConnectionState.waiting: return const Center(child: CupertinoActivityIndicator(animating: true, radius: 20,));
+              default: {
+                List<ToDo> todos = UserPreferences.initialTodos;
+                log.i("$todos");
+                Map<Status, List<ToDo>> statusMap = groupBy(todos, (obj) => (obj as ToDo).status);
+                //statusMap.map((key, value) => ChartData(key, value, Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0)));
+                List<ChartData> chartData = List.empty(growable: true);
+                statusMap.forEach((key, value) {
+                  chartData.add(ChartData(key.name, value.length as double, Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0)));
+                });
+                // final List<ChartData> chartData = [
+                //   ChartData('Complete', 25, Colors.yellow),
+                //   ChartData('Yet To Start', 38, Colors.yellow.shade200),
+                //   ChartData('In Progress', 34, Colors.yellow.shade100),
+                //   ChartData('Cancelled', 52, Colors.yellow.shade900)
+                // ];
+                return Scaffold(
+                  body: Column(children: <Widget>[
+                    Text(
+                      "Status Breakdown",
+                      style:
+                      TextStyle(fontSize: 30, color: JTThemes.primaryColor),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 20)),
+                    Row(children: [
+                      Padding(padding: EdgeInsets.only(left: 10)),
+                      Expanded(
+                          child: TextFormField(
+                            controller: startDate,
+                            style: dateStyle,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              isDense: true,
+                              border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+                              enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+                              labelText: 'Start Date',
+                              labelStyle: TextStyle(color: JTThemes.primaryColor),
+                              floatingLabelAlignment: FloatingLabelAlignment.start,
+                              //icon: dateIcon,
+                              suffixIcon: dateIcon,
+                              //suffixIconConstraints: BoxConstraints(maxWidth: 10, maxHeight: 10)
                             ),
-                            //title: ChartTitle(text: "ToDo Status", textStyle: TextStyle(fontSize: 30, color: JTThemes.primaryColor)),
-                            //legend: Legend(title: LegendTitle(text: "something")),
-                            tooltipBehavior: TooltipBehavior(enable: true),
-                          )))
-                ]))));
+                            readOnly: true,
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now()
+                                      .subtract(Duration(days: 365 * 5)),
+                                  lastDate: DateTime.now());
+                              if (pickedDate != null) {
+                                //logger.d(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                String formattedDate =
+                                DateFormat("yyyy-mm-dd").format(pickedDate);
+                                log.d(formattedDate);
+                                //you can implement different kind of Date Format here according to your requirement
+                                setState(() {
+                                  startDate.text = formattedDate;
+                                });
+                              } else {
+                                log.d("Date is not selected");
+                              }
+                            },
+                          )),
+                      Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
+                      Expanded(
+                          child: TextFormField(
+                            controller: endDate,
+                            style: dateStyle,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              isDense: true,
+                              border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+                              enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+                              //focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: JTThemes.primaryColor)),
+                              labelText: 'End Date',
+                              labelStyle: TextStyle(color: JTThemes.primaryColor),
+                              floatingLabelAlignment: FloatingLabelAlignment.start,
+                              //icon: dateIcon,
+                              suffixIcon: dateIcon,
+                              //suffixIconConstraints: BoxConstraints(maxWidth: 10, maxHeight: 10)
+                            ),
+                            readOnly: true,
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now()
+                                      .subtract(Duration(days: 365 * 5)),
+                                  lastDate: DateTime.now());
+                              if (pickedDate != null) {
+                                //logger.d(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                String formattedDate =
+                                DateFormat("yyyy-mm-dd").format(pickedDate);
+                                log.d(formattedDate);
+                                //you can implement different kind of Date Format here according to your requirement
+                                setState(() {
+                                  endDate.text = formattedDate;
+                                });
+                              } else {
+                                log.d("Date is not selected");
+                              }
+                            },
+                          )),
+                      Padding(padding: EdgeInsets.only(left: 10)),
+                    ]),
+                    Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Theme.of(context).primaryColor),
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                            ),
+                            //height: 200,
+                            child: SfCircularChart(
+                              series: <CircularSeries>[
+                                // Render pie chart
+                                PieSeries<ChartData, String>(
+                                    dataSource: chartData,
+                                    pointColorMapper: (ChartData data, _) =>
+                                    data.color,
+                                    xValueMapper: (ChartData data, _) => data.x,
+                                    yValueMapper: (ChartData data, _) => data.y)
+                              ],
+                              legend: Legend(
+                                isVisible: true,
+                                width: '100%',
+                                textStyle: TextStyle(fontSize: 15, color: JTThemes.primaryColor),
+                              ),
+                              //title: ChartTitle(text: "ToDo Status", textStyle: TextStyle(fontSize: 30, color: JTThemes.primaryColor)),
+                              //legend: Legend(title: LegendTitle(text: "something")),
+                              tooltipBehavior: TooltipBehavior(enable: true),
+                            )))
+                  ]));}
+            }
+            }));
   }
 }
 
